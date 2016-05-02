@@ -1,0 +1,36 @@
+Copyright 2016 Analytical Graphics, Inc., and Contributors
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+# Third-Party Code
+CesiumEditor includes the following third-party code.
+
+### Cesium
+
+http://cesiumjs.org/
+
+> Copyright 2011-2016 Cesium Contributors
+>
+> Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+>
+> http://www.apache.org/licenses/LICENSE-2.0
+>
+> Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+See https://github.com/AnalyticalGraphicsInc/cesium/blob/master/LICENSE.md
+
+### Cordova 
+
+https://cordova.apache.org/
+
+> Copyright 2015 Apache Cordova
+>
+> Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+>
+> http://www.apache.org/licenses/LICENSE-2.0
+>
+> Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
