@@ -15,56 +15,30 @@
     </style>
 </head>
 <body>
-<div id="cesiumContainer">
+<div style="height:100%">
+    <div id="buttons" style="height:2%">
+        <button id="camera">camera</button>
+    </div>
+    <div id="cesiumContainer" style="height:98%"></div>
 </div>
 <script>
     var viewer = new Cesium.Viewer('cesiumContainer');
-    var camera = viewer.camera;
-    var ellipsoid = viewer.scene.globe.ellipsoid;
-    var accelerometerBuffer = 2.15;
-    var balanceAccelerometer = true;
-    var balancedX = 0;
-    var balancedY = 0;
-    var watchID = null;
-
-    document.addEventListener("deviceready", onDeviceReady, false);
-
-    function onDeviceReady() {
-        startWatch();
+    var layers = viewer.imageryLayers;
+    var cameraOptions = { quality : 50 };
+    
+    function cameraSuccess(imageURI) {
+        layers.addImageryProvider(new Cesium.SingleTileImageryProvider({
+            url : imageURI
+        }));
+    }
+    
+    function cameraError() {
+        alert('That\'s and error');
     }
 
-    function startWatch() {
-        var options = { frequency: 50 };
-        watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
-    }
-
-    function onSuccess(acceleration) {
-        if (balanceAccelerometer) {
-            balanceAccelerometer = false;
-            balancedX = acceleration.x + 100;
-            balancedY = acceleration.y + 100;
-        }
-
-        var cameraHeight = ellipsoid.cartesianToCartographic(camera.position).height;
-        var moveRate = cameraHeight / 100.0;
-
-        if (acceleration.x + 100 < balancedX - accelerometerBuffer) {
-            camera.moveForward(moveRate);
-        }
-        if (acceleration.x + 100 > balancedX + accelerometerBuffer) {
-            camera.moveBackward(moveRate);
-        }
-        if (acceleration.y + 100 < balancedY - accelerometerBuffer) {
-            camera.moveLeft(moveRate);
-        }
-        if (acceleration.y + 100 > balancedY + accelerometerBuffer) {
-            camera.moveRight(moveRate);
-        }
-    }
-
-    function onError() {
-        alert('onError!');
-    }
+    document.getElementById('camera').onclick = function() {
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+    };
 </script>
 </body>
 </html>
