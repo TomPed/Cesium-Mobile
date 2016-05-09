@@ -16,10 +16,10 @@
 </head>
 <body>
 <div style="height:100%">
-    <div id="buttons" style="height:2%">
+    <div id="buttons" style="height:5%">
         <button id="camera">camera</button>
     </div>
-    <div id="cesiumContainer" style="height:98%"></div>
+    <div id="cesiumContainer" style="height:95%"></div>
 </div>
 <script>
     var viewer = new Cesium.Viewer('cesiumContainer');
@@ -27,6 +27,7 @@
     var cameraOptions = { quality : 50 };
     
     function cameraSuccess(imageURI) {
+        layers.removeAll();
         layers.addImageryProvider(new Cesium.SingleTileImageryProvider({
             url : imageURI
         }));
