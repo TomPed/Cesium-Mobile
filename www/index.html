@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>My Cesium App</title>
     <script src="Cesium/Cesium.js"></script>
+    <script src="cordova.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <style>
         @import url(Cesium/Widgets/widgets.css);
         html, body, #cesiumContainer {
@@ -13,9 +15,56 @@
     </style>
 </head>
 <body>
-<div id="cesiumContainer"></div>
+<div id="cesiumContainer">
+</div>
 <script>
     var viewer = new Cesium.Viewer('cesiumContainer');
+    var camera = viewer.camera;
+    var ellipsoid = viewer.scene.globe.ellipsoid;
+    var accelerometerBuffer = 2.15;
+    var balanceAccelerometer = true;
+    var balancedX = 0;
+    var balancedY = 0;
+    var watchID = null;
+
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+    function onDeviceReady() {
+        startWatch();
+    }
+
+    function startWatch() {
+        var options = { frequency: 50 };
+        watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
+    }
+
+    function onSuccess(acceleration) {
+        if (balanceAccelerometer) {
+            balanceAccelerometer = false;
+            balancedX = acceleration.x + 100;
+            balancedY = acceleration.y + 100;
+        }
+
+        var cameraHeight = ellipsoid.cartesianToCartographic(camera.position).height;
+        var moveRate = cameraHeight / 100.0;
+
+        if (acceleration.x + 100 < balancedX - accelerometerBuffer) {
+            camera.moveForward(moveRate);
+        }
+        if (acceleration.x + 100 > balancedX + accelerometerBuffer) {
+            camera.moveBackward(moveRate);
+        }
+        if (acceleration.y + 100 < balancedY - accelerometerBuffer) {
+            camera.moveLeft(moveRate);
+        }
+        if (acceleration.y + 100 > balancedY + accelerometerBuffer) {
+            camera.moveRight(moveRate);
+        }
+    }
+
+    function onError() {
+        alert('onError!');
+    }
 </script>
 </body>
 </html>
