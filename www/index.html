@@ -15,55 +15,49 @@
     </style>
 </head>
 <body>
-<div id="cesiumContainer">
+<div style="height:100%">
+    <div id="buttons" style="height:5%">
+        <button id="camera">camera</button>
+    </div>
+    <div id="cesiumContainer" style="height:95%"></div>
 </div>
 <script>
+    document.getElementById('camera').onclick = function() {
+        navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
+    };
+
     var viewer = new Cesium.Viewer('cesiumContainer');
-    var camera = viewer.camera;
-    var ellipsoid = viewer.scene.globe.ellipsoid;
-    var accelerometerBuffer = 2.15;
-    var balanceAccelerometer = true;
-    var balancedX = 0;
-    var balancedY = 0;
-    var watchID = null;
+    var image;
+    var cameraOptions = {
+        quality : 100,
+        targetWidth : 100,
+        targetHeight : 100
 
-    document.addEventListener("deviceready", onDeviceReady, false);
-
-    function onDeviceReady() {
-        startWatch();
+    };
+    
+    function cameraSuccess(imageURI) {
+        image = imageURI;
+        navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError);
     }
 
-    function startWatch() {
-        var options = { frequency: 50 };
-        watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
+    function cameraError() {
+        alert('Unable to load camera.');
     }
 
-    function onSuccess(acceleration) {
-        if (balanceAccelerometer) {
-            balanceAccelerometer = false;
-            balancedX = acceleration.x + 100;
-            balancedY = acceleration.y + 100;
-        }
-
-        var cameraHeight = ellipsoid.cartesianToCartographic(camera.position).height;
-        var moveRate = cameraHeight / 100.0;
-
-        if (acceleration.x + 100 < balancedX - accelerometerBuffer) {
-            camera.moveForward(moveRate);
-        }
-        if (acceleration.x + 100 > balancedX + accelerometerBuffer) {
-            camera.moveBackward(moveRate);
-        }
-        if (acceleration.y + 100 < balancedY - accelerometerBuffer) {
-            camera.moveLeft(moveRate);
-        }
-        if (acceleration.y + 100 > balancedY + accelerometerBuffer) {
-            camera.moveRight(moveRate);
-        }
+    function geolocationSuccess(position) {
+        viewer.entities.removeAll();
+        viewer.entities.add({
+            position : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude),
+            billboard : {
+                image : image,
+                width : 100,
+                height : 100
+            }
+        });
     }
 
-    function onError() {
-        alert('onError!');
+    function geolocationError() {
+        alert('Unable to get your location.');
     }
 </script>
 </body>
