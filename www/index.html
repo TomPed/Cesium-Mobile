@@ -4,66 +4,65 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>My Cesium App</title>
-    <script src="Cesium/Cesium.js"></script>
+    <script src="CesiumUnminified/Cesium.js"></script>
     <script src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <style>
-        @import url(Cesium/Widgets/widgets.css);
+        @import url(CesiumUnminified/Widgets/widgets.css);
         html, body, #cesiumContainer {
             height: 100%; margin: 0; padding: 0; overflow: hidden;
         }
     </style>
 </head>
 <body>
-<div id="cesiumContainer">
+<div style="height:100%">
+    <div style="height:5%">
+        <button id="id">Open</button>
+        <input id="input" type="file"  name="input" style="display: none;" onchange="fileLoaded()"/>
+    </div>
+    <div id="cesiumContainer" style="height:95%"></div>
 </div>
 <script>
+    document.getElementById('id').onclick = function () {
+        document.getElementById('input').click();
+    };
+
+    var fr = new FileReader();
     var viewer = new Cesium.Viewer('cesiumContainer');
-    var camera = viewer.camera;
-    var ellipsoid = viewer.scene.globe.ellipsoid;
-    var accelerometerBuffer = 2.15;
-    var balanceAccelerometer = true;
-    var balancedX = 0;
-    var balancedY = 0;
-    var watchID = null;
 
-    document.addEventListener("deviceready", onDeviceReady, false);
+    fr.onloadend = function () {
+        var extension = Cesium.getExtensionFromUri(document.getElementById('input').value);
 
-    function onDeviceReady() {
-        startWatch();
-    }
-
-    function startWatch() {
-        var options = { frequency: 50 };
-        watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
-    }
-
-    function onSuccess(acceleration) {
-        if (balanceAccelerometer) {
-            balanceAccelerometer = false;
-            balancedX = acceleration.x + 100;
-            balancedY = acceleration.y + 100;
+        switch (extension) {
+            case 'geojson':
+                viewer.dataSources.add(Cesium.GeoJsonDataSource.load(this.result));
+                break;
+            case 'topojson':
+                viewer.dataSources.add(Cesium.GeoJsonDataSource.load(this.result));
+                break;
+            case 'czml':
+                viewer.dataSources.add(Cesium.CzmlDataSource.load(this.result));
+                break;
+            case 'kml':
+                break;
+            case 'kmz':
+                break;
+            case 'gltf':
+                viewer.trackedEntity = viewer.entities.add({
+                    position: Cesium.Cartesian3.fromDegrees(-123.0744619, 44.0503706, 5000),
+                    model: {
+                        uri: this.result
+                    }
+                });
+                break;
+            default:
+                alert('File type [' + extension + '] is not supported.')
         }
+    };
 
-        var cameraHeight = ellipsoid.cartesianToCartographic(camera.position).height;
-        var moveRate = cameraHeight / 100.0;
-
-        if (acceleration.x + 100 < balancedX - accelerometerBuffer) {
-            camera.moveForward(moveRate);
-        }
-        if (acceleration.x + 100 > balancedX + accelerometerBuffer) {
-            camera.moveBackward(moveRate);
-        }
-        if (acceleration.y + 100 < balancedY - accelerometerBuffer) {
-            camera.moveLeft(moveRate);
-        }
-        if (acceleration.y + 100 > balancedY + accelerometerBuffer) {
-            camera.moveRight(moveRate);
-        }
-    }
-
-    function onError() {
-        alert('onError!');
+    function fileLoaded() {
+        var file = document.getElementById('input').files[0];
+        fr.readAsDataURL(file);
     }
 </script>
 </body>
