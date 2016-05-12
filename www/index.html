@@ -22,24 +22,43 @@
     <div id="cesiumContainer" style="height:95%"></div>
 </div>
 <script>
-    var viewer = new Cesium.Viewer('cesiumContainer');
-    var layers = viewer.imageryLayers;
-    var cameraOptions = { quality : 50 };
-    
-    function cameraSuccess(imageURI) {
-        layers.removeAll();
-        layers.addImageryProvider(new Cesium.SingleTileImageryProvider({
-            url : imageURI
-        }));
-    }
-    
-    function cameraError() {
-        alert('That\'s and error');
-    }
-
     document.getElementById('camera').onclick = function() {
         navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
     };
+
+    var viewer = new Cesium.Viewer('cesiumContainer');
+    var image;
+    var cameraOptions = {
+        quality : 100,
+        targetWidth : 100,
+        targetHeight : 100
+
+    };
+    
+    function cameraSuccess(imageURI) {
+        image = imageURI;
+        navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError);
+    }
+
+    function cameraError() {
+        alert('Unable to load camera.');
+    }
+
+    function geolocationSuccess(position) {
+        viewer.entities.removeAll();
+        viewer.entities.add({
+            position : Cesium.Cartesian3.fromDegrees(position.coords.longitude, position.coords.latitude),
+            billboard : {
+                image : image,
+                width : 100,
+                height : 100
+            }
+        });
+    }
+
+    function geolocationError() {
+        alert('Unable to get your location.');
+    }
 </script>
 </body>
 </html>
