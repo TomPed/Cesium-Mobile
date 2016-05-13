@@ -17,23 +17,65 @@
 <body>
 <div style="height:100%">
     <div id="buttons" style="height:5%">
+        <button id="id">Open</button>
+        <input id="input" type="file"  name="input" style="display: none;" onchange="fileLoaded()"/>
         <button id="camera">camera</button>
     </div>
     <div id="cesiumContainer" style="height:95%"></div>
 </div>
 <script>
+    document.getElementById('id').onclick = function () {
+        document.getElementById('input').click();
+    };
+
     document.getElementById('camera').onclick = function() {
         navigator.camera.getPicture(cameraSuccess, cameraError, cameraOptions);
     };
 
-    var viewer = new Cesium.Viewer('cesiumContainer');
     var image;
+    var fr = new FileReader();
+    var viewer = new Cesium.Viewer('cesiumContainer');
     var cameraOptions = {
         quality : 100,
         targetWidth : 100,
         targetHeight : 100
 
     };
+
+    fr.onloadend = function () {
+        var extension = Cesium.getExtensionFromUri(document.getElementById('input').value);
+
+        switch (extension) {
+            case 'geojson':
+                viewer.dataSources.add(Cesium.GeoJsonDataSource.load(this.result));
+                break;
+            case 'topojson':
+                viewer.dataSources.add(Cesium.GeoJsonDataSource.load(this.result));
+                break;
+            case 'czml':
+                viewer.dataSources.add(Cesium.CzmlDataSource.load(this.result));
+                break;
+            case 'kml':
+                break;
+            case 'kmz':
+                break;
+            case 'gltf':
+                viewer.trackedEntity = viewer.entities.add({
+                    position: Cesium.Cartesian3.fromDegrees(-123.0744619, 44.0503706, 5000),
+                    model: {
+                        uri: this.result
+                    }
+                });
+                break;
+            default:
+                alert('File type [' + extension + '] is not supported.')
+        }
+    };
+
+    function fileLoaded() {
+        var file = document.getElementById('input').files[0];
+        fr.readAsDataURL(file);
+    }
     
     function cameraSuccess(imageURI) {
         image = imageURI;
