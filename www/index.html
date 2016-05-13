@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title>My Cesium App</title>
+    <link rel="stylesheet" href="css/index.css">
     <script src="Cesium/Cesium.js"></script>
     <script src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
@@ -15,13 +16,19 @@
     </style>
 </head>
 <body>
-<div style="height:100%">
-    <div id="buttons" style="height:5%">
-        <button id="id">Open</button>
-        <input id="input" type="file"  name="input" style="display: none;" onchange="fileLoaded()"/>
-        <button id="camera">camera</button>
+<div >
+    <div id="buttons">
+        <div id="buttonWrapperLeft">
+            <button class="myButton left" id="id">Load Data</button>
+            <input id="input" type="file"  name="input" style="display:none;" onchange="fileLoaded()"/>
+        </div>
+        <div id="buttonWrapperRight">
+            <button class="myButton right" id="camera">Take Photo</button>
+        </div>
     </div>
-    <div id="cesiumContainer" style="height:95%"></div>
+    <div id="cesiumWrapper">
+        <div id="cesiumContainer"></div>
+    </div>
 </div>
 <script>
     document.getElementById('id').onclick = function () {
