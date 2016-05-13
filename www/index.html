@@ -63,6 +63,7 @@
                 viewer.dataSources.add(Cesium.CzmlDataSource.load(this.result));
                 break;
             case 'kml':
+                viewer.dataSources.add(Cesium.KmlDataSource.load(this.result));
                 break;
             case 'kmz':
                 break;
