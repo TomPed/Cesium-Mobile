@@ -42,6 +42,10 @@
     var image;
     var fr = new FileReader();
     var viewer = new Cesium.Viewer('cesiumContainer');
+    var options = {
+        camera : viewer.scene.camera,
+        canvas : viewer.scene.canvas
+    };
     var cameraOptions = {
         quality : 100,
         targetWidth : 100,
@@ -63,9 +67,10 @@
                 viewer.dataSources.add(Cesium.CzmlDataSource.load(this.result));
                 break;
             case 'kml':
-                viewer.dataSources.add(Cesium.KmlDataSource.load(this.result));
+                viewer.dataSources.add(Cesium.KmlDataSource.load(this.result, options));
                 break;
             case 'kmz':
+                viewer.dataSources.add(Cesium.KmlDataSource.load(this.result, options));
                 break;
             case 'gltf':
                 viewer.trackedEntity = viewer.entities.add({
