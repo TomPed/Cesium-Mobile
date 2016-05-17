@@ -16,4 +16,4 @@ Run `cordova build`
 
 <img src="./images/local.jpg" width="300">
 
-For creating your own Cesium app using Cordova check out [this](http://cesiumjs.org/2016/05/18/An-Introduction-to-Cesium-Android-Apps-with-Cordova/) blog post.
+For creating your own Cesium Android app using Cordova check out [this](http://cesiumjs.org/2016/05/18/An-Introduction-to-Cesium-Android-Apps-with-Cordova/) blog post.
