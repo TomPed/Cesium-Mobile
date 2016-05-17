@@ -1,6 +1,6 @@
-# CesiumEditor
+# CesiumMobile
 
-CesiumEditor is a simple Android mobile app that runs [Cesium](http://cesiumjs.org/) built on [Cordova](https://cordova.apache.org/).
+CesiumMobile is a simple Android mobile app that runs [Cesium](http://cesiumjs.org/) built on [Cordova](https://cordova.apache.org/).
 
 ## Setup
 
