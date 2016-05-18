@@ -17,6 +17,9 @@
 </head>
 <body>
 <div >
+    <div id="button">
+        <input type="button" class="myButton" id="networkToggle" value="Go Offline" style="width: 100%" />
+    </div>
     <div id="buttons">
         <div id="buttonWrapperLeft">
             <button class="myButton left" id="id">Load Data</button>
@@ -31,6 +34,26 @@
     </div>
 </div>
 <script>
+    document.getElementById('networkToggle').onclick = function () {
+        var networkToggle = document.getElementById('networkToggle');
+        viewer.destroy();
+        if (networkToggle.value === 'Go Online') {
+            console.log('ok');
+            viewer = new Cesium.Viewer('cesiumContainer');
+            networkToggle.value = 'Go Offline';
+        } else {
+            console.log('oh');
+            viewer = new Cesium.Viewer('cesiumContainer', {
+                imageryProvider : Cesium.createTileMapServiceImageryProvider({
+                    url : Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
+                }),
+                baseLayerPicker : false,
+                geocoder : false
+            });
+            networkToggle.value = 'Go Online';
+        }
+    };
+
     document.getElementById('id').onclick = function () {
         document.getElementById('input').click();
     };
