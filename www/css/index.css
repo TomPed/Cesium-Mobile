@@ -116,15 +116,19 @@ h1 {
 
 #buttons {
     width: 100%;
-    height:50px;
+    height: 50px;
 }
 
 #buttonWrapperLeft {
-    float: left;height: 100%;width: 50%;
+    float: left;
+    height: 100%;
+    width: 50%;
 }
 
 #buttonWrapperRight {
-    float: right;height: 100%;width: 50%;
+    float: right;
+    height: 100%;
+    width: 50%;
 }
 
 .myButton {
