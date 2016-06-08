@@ -38,11 +38,9 @@
         var networkToggle = document.getElementById('networkToggle');
         viewer.destroy();
         if (networkToggle.value === 'Go Online') {
-            console.log('ok');
             viewer = new Cesium.Viewer('cesiumContainer');
             networkToggle.value = 'Go Offline';
         } else {
-            console.log('oh');
             viewer = new Cesium.Viewer('cesiumContainer', {
                 imageryProvider : Cesium.createTileMapServiceImageryProvider({
                     url : Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII')
